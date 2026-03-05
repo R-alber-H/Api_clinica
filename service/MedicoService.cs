@@ -63,4 +63,22 @@ public class MedicoService : IMedicoService
         return repository.GuardarMedico(medico);
     }
 
+    public int buscarMedicoSintomas(List<string> sintomas)
+    {
+        List<Medico> medicos = ListarMedicos();
+        foreach (var medico in medicos)
+        {
+            foreach (var sintoma in medico.PalabrasClaves)
+            {
+                foreach (var sintomaPaciente in sintomas)
+                {
+                    if (sintoma == sintomaPaciente)
+                    {
+                        return medico.Id;
+                    }
+                }
+            }
+        }return medicos[0].Id;
+    }
+
 }
