@@ -1,4 +1,4 @@
-public class MedicoRepositorycs
+public class MedicoRepository
 {
     private List<Medico> medicos = new List<Medico>();
     private int siguienteId = 1;
