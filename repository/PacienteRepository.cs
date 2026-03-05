@@ -1,27 +1,27 @@
 public class PacienteRepository
 {
-    private List<Paciente> Pacientes = new List<Paciente>();
+    private List<Paciente> pacientes = new List<Paciente>();
     private int siguienteId = 1;
 
     public Paciente GuardarPaciente(Paciente paciente)
     {
         paciente.Id = siguienteId++;
-        Pacientes.Add(paciente);
+        pacientes.Add(paciente);
         return paciente;
     }
 
     public List<Paciente> ObtenerPacientes()
     {
-        return Pacientes;
+        return pacientes;
     }
 
     public Paciente? BuscarPorId(int id)
     {
-        if(Pacientes.Count == 0)
+        if(pacientes.Count == 0)
         {
             return null;
         }
-        foreach (var p in Pacientes)
+        foreach (var p in pacientes)
         {
             if(p.Id == id)
             {
