@@ -4,4 +4,5 @@ public interface IMedicoService
     List<Medico> ListarMedicos();
     Medico BuscarPorId(int id);
     Medico ActualizarDatos(int id, MedicoUpdateDTO dto);
+    int buscarMedicoSintomas(List<string> sintomas);
 }

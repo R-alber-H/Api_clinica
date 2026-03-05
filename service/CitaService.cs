@@ -3,9 +3,9 @@ public class CitaService : ICitasService
 {
      private readonly CitaRepository repositoryCita;
      private readonly PacienteRepository repositoryPaciente;
-     private readonly MedicoService serviceMedico;
+     private readonly IMedicoService serviceMedico;
 
-    public CitaService(CitaRepository repoCita, PacienteRepository repoPaciente, MedicoService medicoService)
+    public CitaService(CitaRepository repoCita, PacienteRepository repoPaciente, IMedicoService medicoService)
     {
         repositoryCita = repoCita;
         repositoryPaciente = repoPaciente;

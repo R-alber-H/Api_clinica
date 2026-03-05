@@ -41,7 +41,7 @@ public class PacienteService : IPacienteService
         List<Paciente> ListaPacientes = repository.ObtenerPacientes();
         if (ListaPacientes.Count == 0)
         {
-            throw new ArgumentException ("No hay pacientes registrados");
+            return new List<Paciente>();
         }
         return ListaPacientes;
     }
