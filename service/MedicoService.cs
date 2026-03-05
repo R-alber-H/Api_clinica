@@ -15,9 +15,9 @@ public class MedicoService : IMedicoService
 
         if (string.IsNullOrWhiteSpace(dto.Apellido))
             throw new ArgumentException("El apellido es obligatorio");
-        
-        Medico? medicoActualizado = repository.ActualizarDatos(id,dto);
-        if(medicoActualizado != null)
+
+        Medico? medicoActualizado = repository.ActualizarDatos(id, dto);
+        if (medicoActualizado != null)
         {
             return medicoActualizado;
         }
@@ -27,7 +27,7 @@ public class MedicoService : IMedicoService
     public Medico BuscarPorId(int id)
     {
         Medico? medico = repository.BuscarPorId(id);
-        if(medico != null)
+        if (medico != null)
         {
             return medico;
         }
@@ -51,7 +51,7 @@ public class MedicoService : IMedicoService
 
         if (dto.Edad <= 0)
             throw new ArgumentException("La edad debe ser mayor a cero");
-        
+
         Medico medico = new Medico
         {
             Nombre = dto.Nombre,
@@ -66,6 +66,10 @@ public class MedicoService : IMedicoService
     public int buscarMedicoSintomas(List<string> sintomas)
     {
         List<Medico> medicos = ListarMedicos();
+        if (sintomas.Count == 0)
+        {
+            return medicos[0].Id;
+        }
         foreach (var medico in medicos)
         {
             foreach (var sintoma in medico.PalabrasClaves)
@@ -78,7 +82,8 @@ public class MedicoService : IMedicoService
                     }
                 }
             }
-        }return medicos[0].Id;
+        }
+        return medicos[0].Id;
     }
 
 }

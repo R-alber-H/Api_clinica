@@ -46,14 +46,14 @@ public class CitaService : ICitasService
         {
             return citas;
         }
-        throw new ArgumentException("No hay citas registradas");
+        return new List<Cita>();
     }
 
     public List<Cita> obtenerCitaPaciente(int id)
     {
         List<Cita>? citas = repositoryCita.obtenerCitaPaciente(id);
         if(citas != null) return citas;
-        throw new ArgumentException("No hay citas registradas");
+        return new List<Cita>();
     }
 
     public List<Cita> obtenerCitas()
@@ -63,7 +63,7 @@ public class CitaService : ICitasService
         {
             return citas;
         }
-        throw new ArgumentException("No hay citas registradas");
+        return new List<Cita>();
     }
 
     public DateTime obtenerProximaHoraDisponible(int idMedico)
