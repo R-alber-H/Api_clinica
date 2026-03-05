@@ -9,7 +9,7 @@ public class Persona
     public string Nombre { get; set; } = "";
 
     [Required(ErrorMessage = "El apellido es obligatorio")]
-    [StringLength(50)]
+    [StringLength(50, ErrorMessage = "El apellido no puede tener más de 50 caracteres")]
     public string Apellido { get; set; } = "";
 
     [Required(ErrorMessage = "El DNI es obligatorio")]
@@ -27,10 +27,4 @@ public class Persona
     [Required(ErrorMessage = "El correo es obligatorio")]
     [EmailAddress(ErrorMessage = "El formato del correo no es válido")]
     public string Correo{get;set;} = "";
-
-    public void ActualizarDatos(string nombre, string apellido)
-    {
-        Nombre = nombre;
-        Apellido = apellido;
-    }
 }
