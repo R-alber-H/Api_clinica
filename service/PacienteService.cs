@@ -8,30 +8,23 @@ public class PacienteService : IPacienteService
         repository = repo;
     }
     public Paciente ActualizarDatos(int id, PacienteUpdateDTO dto)
-{
-    // Validaciones de reglas de negocio
-    if (string.IsNullOrWhiteSpace(dto.Nombre))
-        throw new ArgumentException("El nombre es obligatorio");
-    
-    if (string.IsNullOrWhiteSpace(dto.Apellido))
-        throw new ArgumentException("El apellido es obligatorio");
+    {
+        Paciente? pacienteActualizado = repository.ActualizarDatos(id, dto);
 
-    // Llamar al repository para actualizar
-    Paciente? pacienteActualizado = repository.ActualizarDatos(id, dto);
-
-    if (pacienteActualizado == null)
-        throw new ArgumentException("El paciente no está registrado");
-
-    return pacienteActualizado;
-}
+        if (pacienteActualizado == null)
+        {
+             throw new ArgumentException("El paciente no está registrado");
+        }
+        return pacienteActualizado;
+    }
 
     public Paciente BuscarPorId(int id)
     {
         Paciente? paciente = repository.BuscarPorId(id);
 
-        if(paciente == null)
+        if (paciente == null)
         {
-            throw new ArgumentException("Paciente no encontrado");
+            throw new ArgumentException("Paciente no registrado");
         }
         return paciente;
     }
@@ -41,20 +34,14 @@ public class PacienteService : IPacienteService
         List<Paciente> ListaPacientes = repository.ObtenerPacientes();
         if (ListaPacientes.Count == 0)
         {
-            throw new ArgumentException ("No hay pacientes registrados");
+            return new List<Paciente>();
         }
         return ListaPacientes;
     }
 
-    public Paciente RegistrarPaciente(PacienteDTO dto)
+    public Paciente RegistrarPaciente(PacienteCreateDTO dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.Nombre))
-            throw new ArgumentException("El nombre es obligatorio");
-
-        if (dto.Edad <= 0)
-            throw new ArgumentException("La edad debe ser mayor a cero");
-        
-         Paciente paciente = new Paciente
+        Paciente paciente = new Paciente
         {
             Nombre = dto.Nombre,
             Apellido = dto.Apellido,

@@ -10,55 +10,46 @@ public class MedicoService : IMedicoService
 
     public Medico ActualizarDatos(int id, MedicoUpdateDTO dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.Nombre))
-            throw new ArgumentException("El nombre es obligatorio");
-
-        if (string.IsNullOrWhiteSpace(dto.Apellido))
-            throw new ArgumentException("El apellido es obligatorio");
-
         Medico? medicoActualizado = repository.ActualizarDatos(id, dto);
-        if (medicoActualizado != null)
+        if (medicoActualizado == null)
         {
-            return medicoActualizado;
+           throw new ArgumentException("Medico no Registrado");
         }
-        throw new ArgumentException("Medico no registrado");
+        return medicoActualizado;
+        
     }
 
     public Medico BuscarPorId(int id)
     {
         Medico? medico = repository.BuscarPorId(id);
-        if (medico != null)
+        if (medico == null)
         {
-            return medico;
+             throw new ArgumentException("Medico no Registrado");
         }
-        throw new ArgumentException("Medico no encontrado");
+        return medico;
     }
 
     public List<Medico> ListarMedicos()
     {
         List<Medico>? medicos = repository.ObtenerMedicos();
-        if (medicos != null)
+        if (medicos == null)
         {
-            return medicos;
+            return new List<Medico>();
         }
-        throw new ArgumentException("No hay medicos registrados");
+        return medicos;
     }
 
-    public Medico RegistrarMedico(MedicoDTO dto)
+    public Medico RegistrarMedico(MedicoCreateDTO dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.Nombre))
-            throw new ArgumentException("El nombre es obligatorio");
-
-        if (dto.Edad <= 0)
-            throw new ArgumentException("La edad debe ser mayor a cero");
-
         Medico medico = new Medico
         {
             Nombre = dto.Nombre,
             Apellido = dto.Apellido,
             Correo = dto.Correo,
             Dni = dto.Dni,
-            Edad = dto.Edad
+            Edad = dto.Edad,
+            Especialidad = dto.especialidad,
+            PalabrasClaves = dto.palabrasClave
         };
         return repository.GuardarMedico(medico);
     }

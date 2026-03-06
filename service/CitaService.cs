@@ -3,17 +3,32 @@ public class CitaService : ICitasService
 {
      private readonly CitaRepository repositoryCita;
      private readonly PacienteRepository repositoryPaciente;
-     private readonly MedicoService serviceMedico;
+     private readonly IMedicoService serviceMedico;
 
-    public CitaService(CitaRepository repoCita, PacienteRepository repoPaciente, MedicoService medicoService)
+    public CitaService(CitaRepository repoCita, PacienteRepository repoPaciente, IMedicoService medicoService)
     {
         repositoryCita = repoCita;
         repositoryPaciente = repoPaciente;
         serviceMedico = medicoService;
     }
-    public Cita cambiarEstado(int id)
+    public Cita cambiarEstado(int id, EstadoCita estado)
     {
-        throw new NotImplementedException();
+        Cita cita = obtenerCitaPorId(id);
+        if(cita != null)
+        {
+            cita.Estado = estado;
+            return cita;
+        }
+        throw new ArgumentException("Cita no registrada");
+    }
+    public Cita obtenerCitaPorId(int id)
+    {
+        Cita? cita = repositoryCita.obtenerCitaId(id);
+        if(cita == null)
+        {
+            throw new ArgumentException("Cita no encontrada");
+        }
+        return cita;
     }
 
     public Cita registrarCita(CitaCreateDTO dto)

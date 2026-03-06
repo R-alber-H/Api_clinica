@@ -51,4 +51,16 @@ public class CitaRepository
         return null;
     }
 
+    public Cita? obtenerCitaId(int id)
+    {
+        foreach (Cita cita in citas)
+        {
+            if(cita.Id == id)
+            {
+                return cita;
+            }
+        }
+        return null;
+    }
+
 }

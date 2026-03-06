@@ -1,11 +1,18 @@
 public class PacienteRepository
 {
-    private List<Paciente> pacientes = new List<Paciente>();
-    private int siguienteId = 1;
+    private List<Paciente> pacientes = new List<Paciente>()
+    {
+        new Paciente { Id = 1, Nombre = "Ana", Apellido = "Lopez", Dni = "12345678", Edad = 25, Telefono = "987654321", Correo = "ana.lopez@example.com" },
+        new Paciente { Id = 2, Nombre = "Juan", Apellido = "Perez", Dni = "87654321", Edad = 32, Telefono = "912345678", Correo = "juan.perez@example.com" },
+        new Paciente { Id = 3, Nombre = "Maria", Apellido = "Gomez", Dni = "11223344", Edad = 40, Telefono = "923456789", Correo = "maria.gomez@example.com" }
+    };
+    
+    private int id;
 
     public Paciente GuardarPaciente(Paciente paciente)
     {
-        paciente.Id = siguienteId++;
+        id = pacientes.Max(p => p.Id) + 1;
+        paciente.Id = id;
         pacientes.Add(paciente);
         return paciente;
     }
@@ -21,7 +28,7 @@ public class PacienteRepository
         {
             return null;
         }
-        foreach (var p in pacientes)
+        foreach (Paciente p in pacientes)
         {
             if(p.Id == id)
             {
