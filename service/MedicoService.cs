@@ -41,7 +41,7 @@ public class MedicoService : IMedicoService
         {
             return medicos;
         }
-        throw new ArgumentException("No hay medicos registrados");
+        return new List<Medico>();
     }
 
     public Medico RegistrarMedico(MedicoDTO dto)

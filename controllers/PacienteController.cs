@@ -29,11 +29,25 @@ namespace ApiClinica.Controllers
             return Ok(paciente);
         }
 
-         [HttpPost]
-         public IActionResult CrearPaciente(PacienteDTO dto)
+        [HttpPost]
+        public IActionResult CrearPaciente(PacienteDTO dto)
         {
             Paciente paciente = _pacienteService.RegistrarPaciente(dto);
             return Created("", paciente);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult ActualizarPaciente(int id, PacienteUpdateDTO dto)
+        {
+            try
+            {
+                Paciente pacienteActualizado = _pacienteService.ActualizarDatos(id,dto);
+                return Ok(pacienteActualizado);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
