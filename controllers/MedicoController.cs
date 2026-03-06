@@ -27,7 +27,7 @@ namespace ApiClinica.Controller
         }
 
         [HttpPost]
-        public IActionResult crearMedico(MedicoDTO dto)
+        public IActionResult crearMedico(MedicoCreateDTO dto)
         {
             Medico medico = _medicoService.RegistrarMedico(dto);
             return Created("", medico);

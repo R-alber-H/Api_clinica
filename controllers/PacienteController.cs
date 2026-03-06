@@ -30,7 +30,7 @@ namespace ApiClinica.Controllers
         }
 
         [HttpPost]
-        public IActionResult CrearPaciente(PacienteDTO dto)
+        public IActionResult CrearPaciente(PacienteCreateDTO dto)
         {
             Paciente paciente = _pacienteService.RegistrarPaciente(dto);
             return Created("", paciente);

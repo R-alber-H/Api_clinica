@@ -11,9 +11,24 @@ public class CitaService : ICitasService
         repositoryPaciente = repoPaciente;
         serviceMedico = medicoService;
     }
-    public Cita cambiarEstado(int id)
+    public Cita cambiarEstado(int id, EstadoCita estado)
     {
-        throw new NotImplementedException();
+        Cita cita = obtenerCitaPorId(id);
+        if(cita != null)
+        {
+            cita.Estado = estado;
+            return cita;
+        }
+        throw new ArgumentException("Cita no registrada");
+    }
+    public Cita obtenerCitaPorId(int id)
+    {
+        Cita? cita = repositoryCita.obtenerCitaId(id);
+        if(cita == null)
+        {
+            throw new ArgumentException("Cita no encontrada");
+        }
+        return cita;
     }
 
     public Cita registrarCita(CitaCreateDTO dto)
