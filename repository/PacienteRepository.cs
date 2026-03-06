@@ -7,11 +7,12 @@ public class PacienteRepository
         new Paciente { Id = 3, Nombre = "Maria", Apellido = "Gomez", Dni = "11223344", Edad = 40, Telefono = "923456789", Correo = "maria.gomez@example.com" }
     };
     
-    private int siguienteId =1;
+    private int id;
 
     public Paciente GuardarPaciente(Paciente paciente)
     {
-        paciente.Id = siguienteId++;
+        id = pacientes.Max(p => p.Id) + 1;
+        paciente.Id = id;
         pacientes.Add(paciente);
         return paciente;
     }
@@ -27,7 +28,7 @@ public class PacienteRepository
         {
             return null;
         }
-        foreach (var p in pacientes)
+        foreach (Paciente p in pacientes)
         {
             if(p.Id == id)
             {

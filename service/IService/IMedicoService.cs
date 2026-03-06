@@ -1,6 +1,6 @@
 public interface IMedicoService
 {
-    Medico RegistrarMedico(MedicoDTO medico);
+    Medico RegistrarMedico(MedicoCreateDTO dTO);
     List<Medico> ListarMedicos();
     Medico BuscarPorId(int id);
     Medico ActualizarDatos(int id, MedicoUpdateDTO dto);

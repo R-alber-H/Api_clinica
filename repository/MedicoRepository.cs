@@ -7,14 +7,14 @@ public class MedicoRepository
          new Medico
         {
             Id = 1,
-            Nombre = "Carlos",
+            Nombre = "Mario",
             Apellido = "Ramirez",
             Dni = "12345678",
             Edad = 45,
             Telefono = "987654321",
             Correo = "carlos.ramirez@example.com",
-            Especialidad = Especialidad.Cardiologia,
-            PalabrasClaves = new List<string> { "corazon", "presion", "arterias" }
+            Especialidad = Especialidad.MedicinaGeneral,
+            PalabrasClaves = new List<string>()
         },
         new Medico
         {
@@ -37,16 +37,16 @@ public class MedicoRepository
             Edad = 50,
             Telefono = "923456789",
             Correo = "andres.gomez@example.com",
-            Especialidad = Especialidad.Dermatologia,
-            PalabrasClaves = new List<string> { "piel", "acne", "eczema" }
+            Especialidad = Especialidad.Cardiologia,
+            PalabrasClaves = new List<string> { "Palpitaciones", "Dolor en el pecho" }
         }
     };
-    private int siguienteId = 1;
+    private int id;
 
     public Medico GuardarMedico(Medico medico)
     {
-        medico.Id = siguienteId;
-        siguienteId ++;
+        id = medicos.Max(m => m.Id)+1;
+        medico.Id = id;
         medicos.Add(medico);
         return medico;
     }
@@ -62,7 +62,7 @@ public class MedicoRepository
 
     public Medico? BuscarPorId(int id)
     {
-        foreach (var m in medicos)
+        foreach (Medico m in medicos)
         {
             if(m.Id == id)
             {
