@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-namespace ApiClinica.Controller
+namespace ApiClinica.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -15,22 +15,50 @@ namespace ApiClinica.Controller
         [HttpGet]
         public IActionResult getMedicos()
         {
-            List<Medico> medicos = _medicoService.ListarMedicos();
-            return Ok(medicos);
+            try
+            {
+                List<Medico> medicos = _medicoService.ListarMedicos();
+                return Ok(medicos);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrio un error interno en el servidor");
+            }
         }
 
         [HttpGet("{id}")]
         public IActionResult getMedico(int id)
         {
-            Medico medico = _medicoService.BuscarPorId(id);
-            return Ok(medico);
+            try
+            {
+                if (id <= 0)
+                    return BadRequest("El id debe ser mayor que 0");
+                Medico medico = _medicoService.BuscarPorId(id);
+                return Ok(medico);
+            }
+            catch (ArgumentException ex)
+            {
+                return StatusCode(404, ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrio un error interno en el servidor");
+            }
         }
 
         [HttpPost]
         public IActionResult crearMedico(MedicoCreateDTO dto)
         {
-            Medico medico = _medicoService.RegistrarMedico(dto);
-            return Created("", medico);
+            try
+            {
+                Medico medico = _medicoService.RegistrarMedico(dto);
+                return Created("", medico);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrio un error interno en el servidor");
+            }
+
         }
 
         [HttpPut("{id}")]
@@ -38,12 +66,18 @@ namespace ApiClinica.Controller
         {
             try
             {
+                if (id <= 0)
+                    return BadRequest("El id debe ser mayor que 0");
                 Medico medicoActualizado = _medicoService.ActualizarDatos(id, dto);
                 return Ok(medicoActualizado);
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(404, ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrio un error interno en el servidor");
             }
         }
     }

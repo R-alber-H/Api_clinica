@@ -15,25 +15,52 @@ namespace ApiClinica.Controllers
         [HttpGet]
         public IActionResult getPacientes()
         {
-            List<Paciente> pacientes = _pacienteService.ListarPacientes();
-            return Ok(pacientes);
+            try
+            {
+                List<Paciente> pacientes = _pacienteService.ListarPacientes();
+                return Ok(pacientes);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrio un error interno en el servidor");
+            }
         }
 
         [HttpGet("{id}")]
         public IActionResult getPaciente(int id)
         {
-            Paciente paciente = _pacienteService.BuscarPorId(id);
-            if (paciente == null)
-                return NotFound();
+            try
+            {
+                if (id <= 0)
+                {
+                    return BadRequest("El id debe ser mayor que 0");
+                }
+                Paciente paciente = _pacienteService.BuscarPorId(id);
 
-            return Ok(paciente);
+                return Ok(paciente);
+            }
+            catch (ArgumentException ex)
+            {
+                return StatusCode(404, ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrio un error interno en el servidor");
+            }
         }
 
         [HttpPost]
         public IActionResult CrearPaciente(PacienteCreateDTO dto)
         {
-            Paciente paciente = _pacienteService.RegistrarPaciente(dto);
-            return Created("", paciente);
+            try
+            {
+                Paciente paciente = _pacienteService.RegistrarPaciente(dto);
+                return Created("", paciente);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrio un error interno en el servidor");
+            }
         }
 
         [HttpPut("{id}")]
@@ -41,12 +68,20 @@ namespace ApiClinica.Controllers
         {
             try
             {
-                Paciente pacienteActualizado = _pacienteService.ActualizarDatos(id,dto);
+                if (id <= 0)
+                {
+                    return BadRequest("El id debe ser mayor que 0");
+                }
+                Paciente pacienteActualizado = _pacienteService.ActualizarDatos(id, dto);
                 return Ok(pacienteActualizado);
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(404, ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocurrio un error interno en el servidor");
             }
         }
     }
