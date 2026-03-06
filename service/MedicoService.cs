@@ -58,7 +58,9 @@ public class MedicoService : IMedicoService
             Apellido = dto.Apellido,
             Correo = dto.Correo,
             Dni = dto.Dni,
-            Edad = dto.Edad
+            Edad = dto.Edad,
+            Especialidad = dto.especialidad,
+            PalabrasClaves = dto.palabrasClave
         };
         return repository.GuardarMedico(medico);
     }
