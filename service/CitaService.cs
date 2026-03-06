@@ -1,45 +1,39 @@
 using TuProyecto.Enums;
 public class CitaService : ICitasService
 {
-     private readonly CitaRepository repositoryCita;
-     private readonly PacienteRepository repositoryPaciente;
-     private readonly IMedicoService serviceMedico;
+    private readonly CitaRepository repositoryCita;
+    private readonly IPacienteService servicePaciente;
+    private readonly IMedicoService serviceMedico;
 
-    public CitaService(CitaRepository repoCita, PacienteRepository repoPaciente, IMedicoService medicoService)
+    public CitaService(CitaRepository repoCita, IMedicoService medicoService, IPacienteService pacienteService)
     {
         repositoryCita = repoCita;
-        repositoryPaciente = repoPaciente;
         serviceMedico = medicoService;
+        servicePaciente = pacienteService;
     }
-    public Cita cambiarEstado(int id, EstadoCita estado)
+    public Cita CambiarEstado(int id, EstadoCita estado)
     {
-        Cita cita = obtenerCitaPorId(id);
-        if(cita != null)
-        {
-            cita.Estado = estado;
-            return cita;
-        }
-        throw new ArgumentException("Cita no registrada");
+        Cita cita = ObtenerCitaPorId(id);
+        cita.Estado = estado;
+        return cita;
+
     }
-    public Cita obtenerCitaPorId(int id)
+    public Cita ObtenerCitaPorId(int id)
     {
-        Cita? cita = repositoryCita.obtenerCitaId(id);
-        if(cita == null)
+        Cita? cita = repositoryCita.ObtenerCitaId(id);
+        if (cita == null)
         {
             throw new ArgumentException("Cita no encontrada");
         }
         return cita;
     }
 
-    public Cita registrarCita(CitaCreateDTO dto)
+    public Cita RegistrarCita(CitaCreateDTO dto)
     {
-        Paciente? paciente = repositoryPaciente.BuscarPorId(dto.PacienteId);
-        if(paciente == null)
-        {
-            throw new ArgumentException("El paciente no esta registrado");
-        }
-        int idMedico = serviceMedico.buscarMedicoSintomas(dto.Sintomas);
-        DateTime fechaInicio = obtenerProximaHoraDisponible(idMedico);
+        servicePaciente.BuscarPorId(dto.PacienteId);
+
+        int idMedico = serviceMedico.BuscarMedicoSintomas(dto.Sintomas);
+        DateTime fechaInicio = ObtenerProximaHoraDisponible(idMedico);
         DateTime fechaFin = fechaInicio.AddHours(1);
 
         Cita cita = new Cita
@@ -51,43 +45,43 @@ public class CitaService : ICitasService
             FechaFin = fechaFin,
             Estado = EstadoCita.Pendiente
         };
-        return repositoryCita.guardarCita(cita);
+        return repositoryCita.GuardarCita(cita);
     }
 
-    public List<Cita> obtenerCitaMedico(int id)
+    public List<Cita> ObtenerCitaMedico(int id)
     {
-        List<Cita>? citas = repositoryCita.obtenerCitaMedico(id);
-        if(citas != null)
+        List<Cita>? citas = repositoryCita.ObtenerCitaMedico(id);
+        if (citas != null)
         {
             return citas;
         }
         return new List<Cita>();
     }
 
-    public List<Cita> obtenerCitaPaciente(int id)
+    public List<Cita> ObtenerCitaPaciente(int id)
     {
-        List<Cita>? citas = repositoryCita.obtenerCitaPaciente(id);
-        if(citas != null) return citas;
+        List<Cita>? citas = repositoryCita.ObtenerCitaPaciente(id);
+        if (citas != null) return citas;
         return new List<Cita>();
     }
 
-    public List<Cita> obtenerCitas()
+    public List<Cita> ObtenerCitas()
     {
-        List<Cita>? citas = repositoryCita.obtenerCitas();
-        if(citas != null)
+        List<Cita>? citas = repositoryCita.ObtenerCitas();
+        if (citas != null)
         {
             return citas;
         }
         return new List<Cita>();
     }
 
-    public DateTime obtenerProximaHoraDisponible(int idMedico)
+    public DateTime ObtenerProximaHoraDisponible(int idMedico)
     {
-        List<Cita> citas = obtenerCitaMedico(idMedico);
-        DateTime ultimaFechaFin = DateTime.Today.AddHours(7);    
+        List<Cita> citas = ObtenerCitaMedico(idMedico);
+        DateTime ultimaFechaFin = DateTime.Today.AddHours(7);
         foreach (var cita in citas)
         {
-            if(cita.FechaFin > ultimaFechaFin)
+            if (cita.FechaFin > ultimaFechaFin)
             {
                 ultimaFechaFin = cita.FechaFin;
             }

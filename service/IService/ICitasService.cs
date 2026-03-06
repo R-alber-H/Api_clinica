@@ -2,10 +2,10 @@ using TuProyecto.Enums;
 
 public interface ICitasService
 {
-    Cita registrarCita(CitaCreateDTO dTO);
-    List<Cita> obtenerCitas();
-    List<Cita> obtenerCitaPaciente(int id);
-    List<Cita> obtenerCitaMedico(int id);
-    Cita cambiarEstado(int id,EstadoCita estado);
-    Cita obtenerCitaPorId(int id);
+    Cita RegistrarCita(CitaCreateDTO dTO);
+    List<Cita> ObtenerCitas();
+    List<Cita> ObtenerCitaPaciente(int id);
+    List<Cita> ObtenerCitaMedico(int id);
+    Cita CambiarEstado(int id,EstadoCita estado);
+    Cita ObtenerCitaPorId(int id);
 }

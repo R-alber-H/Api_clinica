@@ -17,7 +17,7 @@ namespace ApiClinica.Controllers
         {
             try
             {
-                List<Cita> citas = _citaService.obtenerCitas();
+                List<Cita> citas = _citaService.ObtenerCitas();
                 return Ok(citas);
             }
             catch (Exception)
@@ -31,7 +31,7 @@ namespace ApiClinica.Controllers
         {
             try
             {
-                Cita cita = _citaService.registrarCita(dto);
+                Cita cita = _citaService.RegistrarCita(dto);
                 return Created("", cita);
             }
             catch (ArgumentException ex)
@@ -53,7 +53,7 @@ namespace ApiClinica.Controllers
                 {
                     return BadRequest("El id debe ser mayor que 0");
                 }
-                Cita citaActualizada = _citaService.cambiarEstado(id,estado);
+                Cita citaActualizada = _citaService.CambiarEstado(id,estado);
                 return Ok(citaActualizada);
             }
             catch (ArgumentException ex)

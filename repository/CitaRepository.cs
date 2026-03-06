@@ -3,7 +3,7 @@ public class CitaRepository
     private List<Cita> citas = new List<Cita>();
     private int siguienteId = 1;
 
-    public Cita guardarCita(Cita cita)
+    public Cita GuardarCita(Cita cita)
     {
         cita.Id = siguienteId;
         citas.Add(cita);
@@ -11,13 +11,13 @@ public class CitaRepository
         return cita;
     }
 
-    public List<Cita>? obtenerCitas()
+    public List<Cita>? ObtenerCitas()
     {
         if(citas.Count != 0) return citas;
         return null;
     }
 
-    public List<Cita>? obtenerCitaPaciente(int id)
+    public List<Cita>? ObtenerCitaPaciente(int id)
     {
         List<Cita> listaPacientes = new List<Cita>();
         foreach (var c in citas)
@@ -34,7 +34,7 @@ public class CitaRepository
         return null;
     }
 
-    public List<Cita>? obtenerCitaMedico(int id)
+    public List<Cita>? ObtenerCitaMedico(int id)
     {
         List<Cita> listaMedicos = new List<Cita>();
         foreach (var c in citas)
@@ -51,7 +51,7 @@ public class CitaRepository
         return null;
     }
 
-    public Cita? obtenerCitaId(int id)
+    public Cita? ObtenerCitaId(int id)
     {
         foreach (Cita cita in citas)
         {

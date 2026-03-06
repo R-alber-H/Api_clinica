@@ -54,7 +54,7 @@ public class MedicoService : IMedicoService
         return repository.GuardarMedico(medico);
     }
 
-    public int buscarMedicoSintomas(List<string> sintomas)
+    public int BuscarMedicoSintomas(List<string> sintomas)
     {
         List<Medico> medicos = ListarMedicos();
         if (sintomas.Count == 0)
