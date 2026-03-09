@@ -1,4 +1,6 @@
 
+using TuProyecto.Enums;
+
 public class MedicoService : IMedicoService
 {
     private readonly MedicoRepository repository;
@@ -13,10 +15,10 @@ public class MedicoService : IMedicoService
         Medico? medicoActualizado = repository.ActualizarDatos(id, dto);
         if (medicoActualizado == null)
         {
-           throw new ArgumentException("Medico no Registrado");
+            throw new ArgumentException("Medico no Registrado");
         }
         return medicoActualizado;
-        
+
     }
 
     public Medico BuscarPorId(int id)
@@ -24,7 +26,7 @@ public class MedicoService : IMedicoService
         Medico? medico = repository.BuscarPorId(id);
         if (medico == null)
         {
-             throw new ArgumentException("Medico no Registrado");
+            throw new ArgumentException("Medico no Registrado");
         }
         return medico;
     }
@@ -54,12 +56,12 @@ public class MedicoService : IMedicoService
         return repository.GuardarMedico(medico);
     }
 
-    public int BuscarMedicoSintomas(List<string> sintomas)
+    public Medico BuscarMedicoSintomas(List<string> sintomas)
     {
         List<Medico> medicos = ListarMedicos();
         if (sintomas.Count == 0)
         {
-            return medicos[0].Id;
+            return BuscarMedicoGeneral();
         }
         foreach (var medico in medicos)
         {
@@ -67,14 +69,27 @@ public class MedicoService : IMedicoService
             {
                 foreach (var sintomaPaciente in sintomas)
                 {
-                    if (sintoma == sintomaPaciente)
+                    if (sintoma.Trim().ToUpper() == sintomaPaciente.Trim().ToUpper())
                     {
-                        return medico.Id;
+                        return medico;
                     }
                 }
             }
         }
-        return medicos[0].Id;
+       return BuscarMedicoGeneral();
+    }
+
+    private Medico BuscarMedicoGeneral()
+    {
+        List<Medico> medicos = ListarMedicos();
+        foreach (Medico medico in medicos)
+        {
+            if(medico.Especialidad == Especialidad.MedicinaGeneral)
+            {
+                return medico;
+            }
+        }
+        throw new ArgumentException ("No hay médico general disponible");
     }
 
 }

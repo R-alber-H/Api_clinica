@@ -31,7 +31,7 @@ namespace ApiClinica.Controllers
         {
             try
             {
-                Cita cita = _citaService.RegistrarCita(dto);
+                CitaResponseDTO cita = _citaService.RegistrarCita(dto);
                 return Created("", cita);
             }
             catch (ArgumentException ex)

@@ -28,24 +28,25 @@ public class CitaService : ICitasService
         return cita;
     }
 
-    public Cita RegistrarCita(CitaCreateDTO dto)
+    public CitaResponseDTO RegistrarCita(CitaCreateDTO dto)
     {
-        servicePaciente.BuscarPorId(dto.PacienteId);
+        Paciente paciente = servicePaciente.BuscarPorId(dto.PacienteId);
 
-        int idMedico = serviceMedico.BuscarMedicoSintomas(dto.Sintomas);
-        DateTime fechaInicio = ObtenerProximaHoraDisponible(idMedico);
+        Medico medico = serviceMedico.BuscarMedicoSintomas(dto.Sintomas);
+        DateTime fechaInicio = ObtenerProximaHoraDisponible(medico.Id);
         DateTime fechaFin = fechaInicio.AddHours(1);
 
         Cita cita = new Cita
         {
             IdPaciente = dto.PacienteId,
-            IdMedico = idMedico,
+            IdMedico = medico.Id,
             Sintomas = dto.Sintomas,
             FechaInicio = fechaInicio,
             FechaFin = fechaFin,
             Estado = EstadoCita.Pendiente
         };
-        return repositoryCita.GuardarCita(cita);
+        Cita citaRespuesta = repositoryCita.GuardarCita(cita);
+        return ConvertirACitaResponseDTO(citaRespuesta, paciente, medico);
     }
 
     public List<Cita> ObtenerCitaMedico(int id)
@@ -87,5 +88,31 @@ public class CitaService : ICitasService
             }
         }
         return ultimaFechaFin;
+    }
+
+    private CitaResponseDTO ConvertirACitaResponseDTO(Cita cita,Paciente paciente,Medico medico)
+    {
+        CitaResponseDTO nuevaCita = new CitaResponseDTO
+        {
+            Id = cita.Id,
+            Paciente = new PacienteInfoDTO
+            {
+                Nombre = paciente.Nombre,
+                Apellido = paciente.Apellido,
+                Dni = paciente.Dni
+            },
+            Medico = new MedicoInfoDTO
+            {
+                Nombre = medico.Nombre,
+                Apellido = medico.Apellido,
+                Dni = medico.Dni,
+                Especialidad = medico.Especialidad
+            },
+            Sintomas = cita.Sintomas,
+            FechaInicio = cita.FechaInicio,
+            FechaFin = cita.FechaFin,
+            Estado = cita.Estado
+        };
+        return nuevaCita;
     }
 }
