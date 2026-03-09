@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using TuProyecto.Enums;
 public class CitaService : ICitasService
 {
@@ -11,21 +12,30 @@ public class CitaService : ICitasService
         serviceMedico = medicoService;
         servicePaciente = pacienteService;
     }
-    public Cita CambiarEstado(int id, EstadoCita estado)
+    public CitaResponseDTO CambiarEstado(int id, EstadoCita estado)
     {
-        Cita cita = ObtenerCitaPorId(id);
+        Cita? cita =repositoryCita.ObtenerCitaId(id);
+        if(cita == null)
+        {
+            throw new ArgumentException ("Cita no encontrada");
+        }
         cita.Estado = estado;
-        return cita;
-
+        Paciente paciente = servicePaciente.BuscarPorId(cita.IdPaciente);
+        Medico medico = serviceMedico.BuscarPorId(cita.IdMedico);
+        CitaResponseDTO citaActualizada = ConvertirACitaResponseDTO(cita,paciente,medico);
+        return citaActualizada;
     }
-    public Cita ObtenerCitaPorId(int id)
+    public CitaResponseDTO ObtenerCitaPorId(int id)
     {
         Cita? cita = repositoryCita.ObtenerCitaId(id);
         if (cita == null)
         {
             throw new ArgumentException("Cita no encontrada");
         }
-        return cita;
+        Paciente paciente = servicePaciente.BuscarPorId(cita.IdPaciente);
+        Medico medico = serviceMedico.BuscarPorId(cita.IdMedico);
+
+        return ConvertirACitaResponseDTO(cita, paciente, medico);
     }
 
     public CitaResponseDTO RegistrarCita(CitaCreateDTO dto)
@@ -49,36 +59,67 @@ public class CitaService : ICitasService
         return ConvertirACitaResponseDTO(citaRespuesta, paciente, medico);
     }
 
-    public List<Cita> ObtenerCitaMedico(int id)
+    public List<CitaResponseDTO> ObtenerCitaMedico(int id)
     {
         List<Cita>? citas = repositoryCita.ObtenerCitaMedico(id);
         if (citas != null)
         {
-            return citas;
+            List<CitaResponseDTO> citasmedicos = new List<CitaResponseDTO>();
+            foreach (var cita in citas)
+            {
+                Paciente paciente = servicePaciente.BuscarPorId(cita.IdPaciente);
+                Medico medico = serviceMedico.BuscarPorId(cita.IdMedico);
+                CitaResponseDTO citaNueva = ConvertirACitaResponseDTO(cita, paciente, medico);
+                citasmedicos.Add(citaNueva);
+            }
+            return citasmedicos;
         }
-        return new List<Cita>();
+        return new List<CitaResponseDTO>();
     }
 
-    public List<Cita> ObtenerCitaPaciente(int id)
+    public List<CitaResponseDTO> ObtenerCitaPaciente(int id)
     {
         List<Cita>? citas = repositoryCita.ObtenerCitaPaciente(id);
-        if (citas != null) return citas;
-        return new List<Cita>();
+        if (citas != null)
+        {
+            List<CitaResponseDTO> citasPacientes = new List<CitaResponseDTO>();
+            foreach (var cita in citas)
+            {
+                Paciente paciente = servicePaciente.BuscarPorId(cita.IdPaciente);
+                Medico medico = serviceMedico.BuscarPorId(cita.IdMedico);
+                CitaResponseDTO citaNueva = ConvertirACitaResponseDTO(cita, paciente, medico);
+                citasPacientes.Add(citaNueva);
+            }
+            return citasPacientes;
+        }
+        return new List<CitaResponseDTO>();
     }
 
-    public List<Cita> ObtenerCitas()
+    public List<CitaResponseDTO> ObtenerCitas()
     {
         List<Cita>? citas = repositoryCita.ObtenerCitas();
         if (citas != null)
         {
-            return citas;
+            List<CitaResponseDTO> citasNuevas = new List<CitaResponseDTO>();
+            foreach (var cita in citas)
+            {
+                Paciente paciente = servicePaciente.BuscarPorId(cita.IdPaciente);
+                Medico medico = serviceMedico.BuscarPorId(cita.IdMedico);
+                CitaResponseDTO citaNueva = ConvertirACitaResponseDTO(cita,paciente,medico);
+                citasNuevas.Add(citaNueva);
+            }
+            return citasNuevas;
         }
-        return new List<Cita>();
+        return new List<CitaResponseDTO>();
     }
 
     public DateTime ObtenerProximaHoraDisponible(int idMedico)
     {
-        List<Cita> citas = ObtenerCitaMedico(idMedico);
+        List<Cita>? citas = repositoryCita.ObtenerCitaMedico(idMedico);
+        if(citas == null)
+        {
+            return DateTime.Today.AddHours(7);
+        }
         DateTime ultimaFechaFin = DateTime.Today.AddHours(7);
         foreach (var cita in citas)
         {
@@ -90,7 +131,7 @@ public class CitaService : ICitasService
         return ultimaFechaFin;
     }
 
-    private CitaResponseDTO ConvertirACitaResponseDTO(Cita cita,Paciente paciente,Medico medico)
+    private CitaResponseDTO ConvertirACitaResponseDTO(Cita cita, Paciente paciente, Medico medico)
     {
         CitaResponseDTO nuevaCita = new CitaResponseDTO
         {

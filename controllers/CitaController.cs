@@ -17,7 +17,7 @@ namespace ApiClinica.Controllers
         {
             try
             {
-                List<Cita> citas = _citaService.ObtenerCitas();
+                List<CitaResponseDTO> citas = _citaService.ObtenerCitas();
                 return Ok(citas);
             }
             catch (Exception)
@@ -45,7 +45,7 @@ namespace ApiClinica.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult cambiarEstado(int id, EstadoCita estado)
+        public IActionResult cambiarEstado(int id, [FromBody] CambiarEstadoDTO dTO)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace ApiClinica.Controllers
                 {
                     return BadRequest("El id debe ser mayor que 0");
                 }
-                Cita citaActualizada = _citaService.CambiarEstado(id,estado);
+                CitaResponseDTO citaActualizada = _citaService.CambiarEstado(id,dTO.Estado);
                 return Ok(citaActualizada);
             }
             catch (ArgumentException ex)
@@ -63,6 +63,28 @@ namespace ApiClinica.Controllers
             catch (Exception)
             {
                 return StatusCode(500, "Ocurrio un error interno en el servidor");
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult obtenerCita(int id)
+        {
+            try
+            {
+               if (id <= 0)
+                {
+                    return BadRequest("El id debe ser mayor que 0");
+                }
+                CitaResponseDTO cita = _citaService.ObtenerCitaPorId(id);
+                return Ok(cita); 
+            }
+            catch (ArgumentException ex)
+            {
+                return StatusCode(404,ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500,"Ocurrio un error interno en el servidor");
             }
         }
     }
