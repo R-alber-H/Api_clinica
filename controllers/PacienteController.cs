@@ -57,6 +57,10 @@ namespace ApiClinica.Controllers
                 Paciente paciente = _pacienteService.RegistrarPaciente(dto);
                 return Created("", paciente);
             }
+            catch (ArgumentException ex)
+            {
+                return StatusCode(409, ex.Message);
+            }
             catch (Exception)
             {
                 return StatusCode(500, "Ocurrio un error interno en el servidor");

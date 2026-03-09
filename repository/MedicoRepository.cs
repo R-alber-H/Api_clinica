@@ -54,13 +54,13 @@ public class MedicoRepository
         return medico;
     }
 
-    public List<Medico>? ObtenerMedicos()
+    public List<Medico> ObtenerMedicos()
     {
         if(medicos.Count != 0)
         {
             return medicos;
         }
-        return null;
+        return new List<Medico>();
     }
 
     public Medico? BuscarPorId(int id)

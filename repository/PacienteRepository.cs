@@ -19,6 +19,10 @@ public class PacienteRepository
 
     public List<Paciente> ObtenerPacientes()
     {
+        if(pacientes.Count == 0)
+        {
+            return new List<Paciente>();
+        }
         return pacientes;
     }
 

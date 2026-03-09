@@ -33,16 +33,16 @@ public class MedicoService : IMedicoService
 
     public List<Medico> ListarMedicos()
     {
-        List<Medico>? medicos = repository.ObtenerMedicos();
-        if (medicos == null)
-        {
-            return new List<Medico>();
-        }
+        List<Medico> medicos = repository.ObtenerMedicos();
         return medicos;
     }
 
     public Medico RegistrarMedico(MedicoCreateDTO dto)
     {
+        if (MedicoRegistradoConDni(dto.Dni))
+        {
+            throw new ArgumentException($"Ya existe un medico registrado con el DNI {dto.Dni}");
+        }
         Medico medico = new Medico
         {
             Nombre = dto.Nombre,
@@ -51,6 +51,7 @@ public class MedicoService : IMedicoService
             Dni = dto.Dni,
             Edad = dto.Edad,
             Especialidad = dto.especialidad,
+            Telefono = dto.Telefono,
             PalabrasClaves = dto.palabrasClave
         };
         return repository.GuardarMedico(medico);
@@ -107,4 +108,16 @@ public class MedicoService : IMedicoService
         return medico;
     }
 
+    private bool MedicoRegistradoConDni(string dni)
+    {
+        List<Medico> medicos = ListarMedicos();
+        foreach (Medico medico in medicos)
+        {
+            if(medico.Dni == dni)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
