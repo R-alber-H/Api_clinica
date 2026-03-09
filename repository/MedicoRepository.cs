@@ -14,7 +14,8 @@ public class MedicoRepository
             Telefono = "987654321",
             Correo = "carlos.ramirez@example.com",
             Especialidad = Especialidad.MedicinaGeneral,
-            PalabrasClaves = new List<string>()
+            PalabrasClaves = new List<string>(),
+            Activo= true
         },
         new Medico
         {
@@ -26,7 +27,8 @@ public class MedicoRepository
             Telefono = "912345678",
             Correo = "lucia.martinez@example.com",
             Especialidad = Especialidad.Pediatria,
-            PalabrasClaves = new List<string> { "niños", "vacunas", "crecimiento" }
+            PalabrasClaves = new List<string> { "niños", "vacunas", "crecimiento" },
+            Activo= true
         },
         new Medico
         {
@@ -38,7 +40,8 @@ public class MedicoRepository
             Telefono = "923456789",
             Correo = "andres.gomez@example.com",
             Especialidad = Especialidad.Cardiologia,
-            PalabrasClaves = new List<string> { "Palpitaciones", "Dolor en el pecho" }
+            PalabrasClaves = new List<string> { "Palpitaciones", "Dolor en el pecho" },
+            Activo= true
         }
     };
     private int id;

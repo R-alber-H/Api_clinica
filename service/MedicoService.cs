@@ -65,6 +65,10 @@ public class MedicoService : IMedicoService
         }
         foreach (var medico in medicos)
         {
+            if (!medico.Activo)
+            {
+                continue;
+            }
             foreach (var sintoma in medico.PalabrasClaves)
             {
                 foreach (var sintomaPaciente in sintomas)
@@ -84,12 +88,23 @@ public class MedicoService : IMedicoService
         List<Medico> medicos = ListarMedicos();
         foreach (Medico medico in medicos)
         {
+            if (!medico.Activo)
+            {
+                continue;
+            }
             if(medico.Especialidad == Especialidad.MedicinaGeneral)
             {
                 return medico;
             }
         }
         throw new ArgumentException ("No hay médico general disponible");
+    }
+
+    public Medico DesactivarMedico(int id)
+    {
+        Medico medico = BuscarPorId(id);
+        medico.Activo = false;
+        return medico;
     }
 
 }

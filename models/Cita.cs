@@ -8,5 +8,5 @@ public class Cita
     public List<string> Sintomas {get;set;} = new List<string>();
     public DateTime FechaInicio {get;set;}
     public DateTime FechaFin {get;set;}
-    public EstadoCita Estado { get; set; }        
+    public EstadoCita Estado { get; set; } = EstadoCita.Pendiente   ;    
 }
