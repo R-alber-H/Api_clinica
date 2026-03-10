@@ -41,6 +41,10 @@ public class PacienteService : IPacienteService
 
     public Paciente RegistrarPaciente(PacienteCreateDTO dto)
     {
+        if (PacienteRegistradoConDni(dto.Dni))
+        {
+            throw new ArgumentException($"Ya existe un paciente registrado con el DNI {dto.Dni}");
+        }
         Paciente paciente = new Paciente
         {
             Nombre = dto.Nombre,
@@ -52,5 +56,18 @@ public class PacienteService : IPacienteService
         };
 
         return repository.GuardarPaciente(paciente);
+    }
+
+    private bool PacienteRegistradoConDni(string dni)
+    {
+        List<Paciente> pacientes = repository.ObtenerPacientes();
+        foreach (Paciente paciente in pacientes)
+        {
+            if(paciente.Dni == dni)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -11,7 +11,11 @@ builder.Services.AddSingleton<IMedicoService, MedicoService>();
 builder.Services.AddSingleton<CitaRepository>();
 builder.Services.AddSingleton<ICitasService, CitaService>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
