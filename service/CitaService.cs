@@ -14,15 +14,20 @@ public class CitaService : ICitasService
     }
     public CitaResponseDTO CambiarEstado(int id, EstadoCita estado)
     {
-        Cita? cita =repositoryCita.ObtenerCitaId(id);
-        if(cita == null)
+        Cita? cita = repositoryCita.ObtenerCitaId(id);
+        if (cita == null)
         {
-            throw new ArgumentException ("Cita no encontrada");
+            throw new ArgumentException("Cita no encontrada");
+        }
+        if (cita.Estado != EstadoCita.Pendiente)
+        {
+            throw new ArgumentException("Solo se pueden modificar citas pendientes");
         }
         cita.Estado = estado;
+        cita.FechaActualizacion = DateTime.Now;
         Paciente paciente = servicePaciente.BuscarPorId(cita.IdPaciente);
         Medico medico = serviceMedico.BuscarPorId(cita.IdMedico);
-        CitaResponseDTO citaActualizada = ConvertirACitaResponseDTO(cita,paciente,medico);
+        CitaResponseDTO citaActualizada = ConvertirACitaResponseDTO(cita, paciente, medico);
         return citaActualizada;
     }
     public CitaResponseDTO ObtenerCitaPorId(int id)
@@ -105,7 +110,7 @@ public class CitaService : ICitasService
             {
                 Paciente paciente = servicePaciente.BuscarPorId(cita.IdPaciente);
                 Medico medico = serviceMedico.BuscarPorId(cita.IdMedico);
-                CitaResponseDTO citaNueva = ConvertirACitaResponseDTO(cita,paciente,medico);
+                CitaResponseDTO citaNueva = ConvertirACitaResponseDTO(cita, paciente, medico);
                 citasNuevas.Add(citaNueva);
             }
             return citasNuevas;
@@ -116,7 +121,7 @@ public class CitaService : ICitasService
     public DateTime ObtenerProximaHoraDisponible(int idMedico)
     {
         List<Cita>? citas = repositoryCita.ObtenerCitaMedico(idMedico);
-        if(citas == null)
+        if (citas == null)
         {
             return DateTime.Today.AddHours(7);
         }
@@ -152,7 +157,9 @@ public class CitaService : ICitasService
             Sintomas = cita.Sintomas,
             FechaInicio = cita.FechaInicio,
             FechaFin = cita.FechaFin,
-            Estado = cita.Estado
+            Estado = cita.Estado,
+            FechaCreacion = cita.FechaCreacion,
+            FechaActualizacion  = cita.FechaActualizacion
         };
         return nuevaCita;
     }
