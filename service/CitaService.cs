@@ -102,26 +102,24 @@ public class CitaService : ICitasService
 
     public List<CitaResponseDTO> ObtenerCitas()
     {
-        List<Cita>? citas = repositoryCita.ObtenerCitas();
-        if (citas != null)
+        List<Cita> citas = repositoryCita.ObtenerCitas();
+
+        List<CitaResponseDTO> citasNuevas = new List<CitaResponseDTO>();
+        foreach (var cita in citas)
         {
-            List<CitaResponseDTO> citasNuevas = new List<CitaResponseDTO>();
-            foreach (var cita in citas)
-            {
-                Paciente paciente = servicePaciente.BuscarPorId(cita.IdPaciente);
-                Medico medico = serviceMedico.BuscarPorId(cita.IdMedico);
-                CitaResponseDTO citaNueva = ConvertirACitaResponseDTO(cita, paciente, medico);
-                citasNuevas.Add(citaNueva);
-            }
-            return citasNuevas;
+            Paciente paciente = servicePaciente.BuscarPorId(cita.IdPaciente);
+            Medico medico = serviceMedico.BuscarPorId(cita.IdMedico);
+            CitaResponseDTO citaNueva = ConvertirACitaResponseDTO(cita, paciente, medico);
+            citasNuevas.Add(citaNueva);
         }
-        return new List<CitaResponseDTO>();
+        return citasNuevas;
+
     }
 
     public DateTime ObtenerProximaHoraDisponible(int idMedico)
     {
-        List<Cita>? citas = repositoryCita.ObtenerCitaMedico(idMedico);
-        if (citas == null)
+        List<Cita> citas = repositoryCita.ObtenerCitaMedico(idMedico);
+        if (citas.Count == 0)
         {
             return DateTime.Today.AddHours(7);
         }
@@ -132,6 +130,11 @@ public class CitaService : ICitasService
             {
                 ultimaFechaFin = cita.FechaFin;
             }
+        }
+        if(ultimaFechaFin >= DateTime.Today.AddHours(17))
+        {
+            
+            ultimaFechaFin = DateTime.Today.AddDays(1).AddHours(7);
         }
         return ultimaFechaFin;
     }
@@ -159,7 +162,7 @@ public class CitaService : ICitasService
             FechaFin = cita.FechaFin,
             Estado = cita.Estado,
             FechaCreacion = cita.FechaCreacion,
-            FechaActualizacion  = cita.FechaActualizacion
+            FechaActualizacion = cita.FechaActualizacion
         };
         return nuevaCita;
     }
