@@ -9,4 +9,6 @@ public class CitaResponseDTO
     public DateTime FechaInicio { get; set; }
     public DateTime FechaFin { get; set; }
     public EstadoCita Estado { get; set; }
+    public DateTime FechaCreacion { get; set; } 
+    public DateTime FechaActualizacion { get; set; }
 }

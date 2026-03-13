@@ -11,13 +11,12 @@ public class CitaRepository
         return cita;
     }
 
-    public List<Cita>? ObtenerCitas()
+    public List<Cita> ObtenerCitas()
     {
-        if(citas.Count != 0) return citas;
-        return null;
+        return citas;
     }
 
-    public List<Cita>? ObtenerCitaPaciente(int id)
+    public List<Cita> ObtenerCitaPaciente(int id)
     {
         List<Cita> listaPacientes = new List<Cita>();
         foreach (var c in citas)
@@ -27,14 +26,10 @@ public class CitaRepository
                 listaPacientes.Add(c);
             }
         }
-        if(listaPacientes.Count != 0)
-        {
-            return listaPacientes;
-        }
-        return null;
+        return listaPacientes;
     }
 
-    public List<Cita>? ObtenerCitaMedico(int id)
+    public List<Cita> ObtenerCitaMedico(int id)
     {
         List<Cita> listaMedicos = new List<Cita>();
         foreach (var c in citas)
@@ -44,11 +39,7 @@ public class CitaRepository
                 listaMedicos.Add(c);
             }
         }
-        if(listaMedicos.Count != 0)
-        {
-            return listaMedicos;
-        }
-        return null;
+       return listaMedicos;
     }
 
     public Cita? ObtenerCitaId(int id)

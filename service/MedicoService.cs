@@ -104,6 +104,10 @@ public class MedicoService : IMedicoService
     public Medico DesactivarMedico(int id)
     {
         Medico medico = BuscarPorId(id);
+        if (!medico.Activo)
+        {
+            throw new ArgumentException ("El medico ya esta inactivo");
+        }
         medico.Activo = false;
         return medico;
     }
